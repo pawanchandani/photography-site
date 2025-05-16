@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Login from "./components/Login";
+import Upload from "./components/Upload";
+import Gallery from "./components/Gallery";
+import { isLoggedIn, removeToken } from "./utils/auth";
 
-function App() {
+export default function App() {
+  const [loggedIn, setLoggedIn] = useState(isLoggedIn());
+
+  const handleLogout = () => {
+    removeToken();
+    setLoggedIn(false);
+  };
+
+  if (!loggedIn) {
+    return <Login onLogin={() => setLoggedIn(true)} />;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ padding: 20, fontFamily: "Arial, sans-serif" }}>
+      <button onClick={handleLogout} style={{ marginBottom: 20 }}>Logout</button>
+      <Upload />
+      <hr />
+      <Gallery />
     </div>
   );
 }
-
-export default App;
